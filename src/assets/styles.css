@@ -1,0 +1,141 @@
+body{
+    font-family: 'Inter', sans-serif;
+    font-family: 'League Spartan', sans-serif;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 1rem;
+  }
+  a {
+    color: black;
+    
+  }
+  a:hover{
+    color: grey;
+  }
+  
+  .btn{
+    font-size: 1.2rem;
+  }
+  
+  .navbar{
+    border-bottom: 2px solid black;
+    font-size: 27px;
+  }
+  
+  .borda{
+    border-right: 2px solid black;
+  }
+  
+  .coldir1{
+    background-color: #ddd;
+    height: 100vh;
+  }
+  
+  h1{
+    font-size: 8rem;
+    margin-top: 5vh;
+  }
+  
+  .textodir{
+    text-align: right;
+  }
+  
+  .final{ 
+    margin-top: 10vh;
+  }
+  
+  .colesq1{
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-content: flex-end;
+    align-items: flex-end;
+    padding-right: 5vw;
+  }
+  
+  .imgcapa{
+    width: 55vw;
+    margin-top: 35vh;
+  }
+  
+  .imgplanta{
+    width:50vw;
+    
+    border-left: 2px solid black;
+  }
+  
+  .btncomecar{
+    margin-top: 15vh;
+    background-color: black;
+    color: white!important;
+    font-size: 1.2rem;
+    border-radius: 60px;
+    padding: 20px 115px;
+    margin-right: 5vw;
+  }
+  .btnform{
+    margin-top: 10%;
+    background-color: black;
+    color: white!important;
+    font-size: 1.2rem;
+    border-radius: 60px;
+    padding: 5% 30%;
+  }
+  
+  .toplogo{
+    border-top: 2px solid black;
+    width: 25%;
+    font-size: 5rem;
+  }
+  
+  .opcoes1{
+    margin: 5vh;
+  }
+  .bordatotal{
+    border: 2px solid black;
+  }
+  
+  .opcoes2{
+    margin: 5vh;
+    
+  }
+  
+  .SelecaoOpcoes{
+    background-color: #ddd;
+    padding: 15%;
+  }
+  
+  @media (max-width: 1024px) {
+    .imgcapa{
+      width: 50vw;
+      margin-top: 35vh;
+    }
+  }
+  @media (max-width: 600px) {
+  
+    .principal{
+      display: flex;
+      flex-direction: column-reverse;
+    }
+  
+    .imgcapa{
+      width: 90vw;
+      margin-top: 40%;
+    }
+  
+    .coldir1{
+      height: 50vh;
+    }
+  
+    .btncomecar{
+      margin-right: 0px;
+      width: 95%;
+      padding: 20px;
+    }
+  
+    h1{
+      font-size: 6rem
+    }
+  
+  
+  }
