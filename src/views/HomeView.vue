@@ -1,17 +1,17 @@
 <template>
-  <main class="h-screen w-screen flex items-center justify-center bg-white">
+  <main class="h-full w-screen flex items-center justify-center bg-white">
     <div class="w-full h-full">
       <div class="grid grid-cols-1 sm:grid-cols-5 gap-8 items-center h-full w-full">
         
         <!-- Imagem da capa com desfoque -->
-        <div class="sm:col-span-2 flex justify-center sm:border-b-2 md:border-r-2 sm:justify-start h-full">
+        <div class="sm:col-span-2 flex justify-center sm:border-b-2 md:border-r-2 border-black sm:justify-start h-full">
           <img alt="casa" src="/public/casa.png" 
                class="w-full h-full object-cover" />
         </div>
 
         <!-- Texto e informações -->
         <div class="sm:col-span-3">
-          <h1 class="text-5xl font-semibold text-gray-800">CZA+</h1>
+          <h1 class="text-5xl font-semibold">CZA+</h1>
           <br>
 
           <!-- Descrição curta -->
