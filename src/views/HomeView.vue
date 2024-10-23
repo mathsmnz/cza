@@ -1,12 +1,11 @@
 <template>
-  <main class="h-full w-screen flex items-center justify-center bg-white">
+  <main class="h-full w-full flex items-center justify-center bg-white">
     <div class="w-full h-full">
       <div class="grid grid-cols-1 sm:grid-cols-5 gap-8 items-center h-full w-full">
-        
+
         <!-- Imagem da capa com desfoque -->
-        <div class="sm:col-span-2 flex justify-center sm:border-b-2 md:border-r-2 border-black sm:justify-start h-full">
-          <img alt="casa" src="/public/casa.png" 
-               class="w-full h-full object-cover" />
+        <div class="sm:col-span-2 flex justify-center sm:border-b-2 md:border-r-2 border-black sm:justify-start h-full w-full">
+          <img alt="casa" src="/public/casa.png" class="w-full h-full object-cover" />
         </div>
 
         <!-- Texto e informações -->

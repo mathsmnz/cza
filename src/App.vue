@@ -3,13 +3,15 @@ import NavBar from './components/NavBar.vue';
 </script>
 
 <template>
-  <header>
-    <NavBar />
-  </header>
+  <div class="flex flex-col h-screen">
+    <header>
+      <NavBar />
+    </header>
 
-  <body class="h-dvh">
-    <RouterView />
-  </body>
+    <main class="grow">
+      <RouterView />
+    </main>
+  </div>
 </template>
 
 <style scoped></style>
