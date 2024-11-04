@@ -34,7 +34,7 @@
                   <div v-for="(combo, comboIndex) in option.combos" :key="comboIndex">
                     <label class="flex items-center">
                       <input type="checkbox" v-model="combo.selected" class="mr-2"
-                        @change="updateAssociatedOption(option.label, combo)">
+                        @change="updateAssociatedOption(option.label, combo, option.group, )">
                       {{ combo.label }}
                     </label>
                   </div>
@@ -67,15 +67,39 @@ export default {
       combos: option.combos.map(combo => ({ ...combo, selected: false }))
     })));
 
+    console.log(options);
+
     const toggleAccordion = (index) => {
       openAccordion.value = openAccordion.value === index ? null : index;
     };
 
     const isOpen = (index) => openAccordion.value === index;
 
-    const updateAssociatedOption = (optionLabel, combo) => {
+    const updateAssociatedOption = (optionLabel, combo, group) => {
       if (combo.selected) {
-        console.log(`Selecionado: ${optionLabel} - ${combo.label} (${combo.associated})`);
+        console.log(`Selecionado: ${optionLabel} ${group} - ${combo.label} (${combo.associated})`);
+      }
+    };
+
+    const updateSelections = (optionLabel, selectedCombo) => {
+      selectedCombo.selected = !selectedCombo.selected;
+
+      if (selectedCombo.selected) {
+        // Desativa as opções incompatíveis
+        options.value.forEach(option => {
+          option.combos.forEach(combo => {
+            if (combo !== selectedCombo) {
+              combo.available = false;
+            }
+          });
+        });
+      } else {
+        // Reativa todas as opções quando desmarcado
+        options.value.forEach(option => {
+          option.combos.forEach(combo => {
+            combo.available = true;
+          });
+        });
       }
     };
 
@@ -102,6 +126,7 @@ export default {
       toggleAccordion,
       isOpen,
       updateAssociatedOption,
+      updateSelections,
       resetForm,
       submitForm
     };

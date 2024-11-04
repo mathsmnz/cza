@@ -1,22 +1,25 @@
 [
     {
+      "group":"A",
       "label": "Separar Cozinha da Sala de Estar",
       "combos": [
         { "label": "Expandir Cozinha/Sala de Estar para a Frente", "associated": "Opção N" },
         { "label": "Expandir Cozinha/Sala de Estar para Frente e Lado", "associated": "Opção D" }
       ]
     },
-    {
+    { 
+      "group":"B",
       "label": "Expandir Cozinha/Sala de Estar para a Frente",
       "combos": [
         { "label": "Separar Cozinha da Sala de Estar", "associated": "Opção B" },
         { "label": "Expandir Cozinha/Sala de Estar para a Frente", "associated": "Opção A" },
         { "label": "Expandir Cozinha/Sala de Estar para Frente e Lado", "associated": "Opção C" },
         { "label": "Adicionar Cômodo na Frente", "associated": "Opção N" },
-        { "label": "Adicionar Cômodo nos Fundos", "associated": null }
+        { "label": "Adicionar Cômodo nos Fundos", "associated":  "Opção //" }
       ]
     },
     {
+      "group":"C",
       "label": "Expandir Cozinha/Sala de Estar para o Lado",
       "combos": [
         { "label": "Expandir Cozinha/Sala de Estar para a Frente", "associated": "Opção C" },
@@ -27,6 +30,7 @@
       ]
     },
     {
+      "group":"D",
       "label": "Expandir Cozinha/Sala de Estar para Frente e Lado",
       "combos": [
         { "label": "Separar Cozinha da Sala de Estar", "associated": "Opção D" },
@@ -35,6 +39,7 @@
       ]
     },
     {
+      "group":"E",
       "label": "Adicionar Cômodo na Frente",
       "combos": [
         { "label": "Expandir Cozinha/Sala de Estar para a Frente", "associated": "Opção N" },
@@ -46,6 +51,7 @@
       ]
     },
     {
+      "group":"F",
       "label": "Adicionar Cômodo nos Fundos (pode incluir banheiro extra)",
       "combos": [
         { "label": "Expandir Cozinha/Sala de Estar para a Frente", "associated": "Opção //" },
@@ -56,6 +62,7 @@
       ]
     },
     {
+      "group":"G",
       "label": "Adicionar Lavanderia",
       "combos": [
         { "label": "Expandir Cozinha/Sala de Estar para o Lado", "associated": "Opção F" },
