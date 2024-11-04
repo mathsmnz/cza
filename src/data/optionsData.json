@@ -1,0 +1,67 @@
+[
+    {
+      "label": "Separar Cozinha da Sala de Estar",
+      "combos": [
+        { "label": "Expandir Cozinha/Sala de Estar para a Frente", "associated": "Opção N" },
+        { "label": "Expandir Cozinha/Sala de Estar para Frente e Lado", "associated": "Opção D" }
+      ]
+    },
+    {
+      "label": "Expandir Cozinha/Sala de Estar para a Frente",
+      "combos": [
+        { "label": "Separar Cozinha da Sala de Estar", "associated": "Opção B" },
+        { "label": "Expandir Cozinha/Sala de Estar para a Frente", "associated": "Opção A" },
+        { "label": "Expandir Cozinha/Sala de Estar para Frente e Lado", "associated": "Opção C" },
+        { "label": "Adicionar Cômodo na Frente", "associated": "Opção N" },
+        { "label": "Adicionar Cômodo nos Fundos", "associated": null }
+      ]
+    },
+    {
+      "label": "Expandir Cozinha/Sala de Estar para o Lado",
+      "combos": [
+        { "label": "Expandir Cozinha/Sala de Estar para a Frente", "associated": "Opção C" },
+        { "label": "Expandir Cozinha/Sala de Estar para o Lado", "associated": "Opção E" },
+        { "label": "Adicionar Cômodo na Frente", "associated": "Opção o" },
+        { "label": "Adicionar Cômodo nos Fundos", "associated": "Opção //" },
+        { "label": "Adicionar Lavanderia", "associated": "Opção F" }
+      ]
+    },
+    {
+      "label": "Expandir Cozinha/Sala de Estar para Frente e Lado",
+      "combos": [
+        { "label": "Separar Cozinha da Sala de Estar", "associated": "Opção D" },
+        { "label": "Expandir Cozinha/Sala de Estar para Frente e Lado", "associated": "Opção C" },
+        { "label": "Adicionar Cômodo na Frente", "associated": "Opção P" }
+      ]
+    },
+    {
+      "label": "Adicionar Cômodo na Frente",
+      "combos": [
+        { "label": "Expandir Cozinha/Sala de Estar para a Frente", "associated": "Opção N" },
+        { "label": "Expandir Cozinha/Sala de Estar para o Lado", "associated": "Opção O" },
+        { "label": "Expandir Cozinha/Sala de Estar para Frente e Lado", "associated": "Opção P" },
+        { "label": "Adicionar Cômodo na Frente", "associated": "Opção G" },
+        { "label": "Adicionar Cômodo nos Fundos", "associated": "Opção //" },
+        { "label": "Adicionar Lavanderia", "associated": "Opção L" }
+      ]
+    },
+    {
+      "label": "Adicionar Cômodo nos Fundos (pode incluir banheiro extra)",
+      "combos": [
+        { "label": "Expandir Cozinha/Sala de Estar para a Frente", "associated": "Opção //" },
+        { "label": "Expandir Cozinha/Sala de Estar para o Lado", "associated": "Opção //" },
+        { "label": "Expandir Cozinha/Sala de Estar para Frente e Lado", "associated": "Opção //" },
+        { "label": "Adicionar Cômodo na Frente", "associated": "Opção //" },
+        { "label": "Adicionar Cômodo nos Fundos", "associated": "Opções H/I/J/K" }
+      ]
+    },
+    {
+      "label": "Adicionar Lavanderia",
+      "combos": [
+        { "label": "Expandir Cozinha/Sala de Estar para o Lado", "associated": "Opção F" },
+        { "label": "Adicionar Cômodo nos Fundos", "associated": "Opção L" },
+        { "label": "Adicionar Lavanderia", "associated": "Opção M" }
+      ]
+    }
+  ]
+  

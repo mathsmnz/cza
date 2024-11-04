@@ -5,7 +5,7 @@
 
         <!-- Imagem da capa com desfoque -->
         <div class="sm:col-span-2 flex justify-center sm:border-b-2 md:border-r-2 border-black sm:justify-start h-full w-full">
-          <img alt="casa" src="/public/casa.png" class="w-full h-full object-cover" />
+          <img alt="casa" src="/casa.png?url" class="w-full h-full object-cover" />
         </div>
 
         <!-- Texto e informações -->
