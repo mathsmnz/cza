@@ -5,11 +5,11 @@
         "combos": [
             {
                 "label": "Expandir Cozinha/Sala de Estar para a Frente",
-                "associated": "N"
+                "associated": "Opção N"
             },
             {
                 "label": "Expandir Cozinha/Sala de Estar para Frente e Lado",
-                "associated": "D"
+                "associated": "Opção D"
             }
         ]
     },
@@ -19,23 +19,23 @@
         "combos": [
             {
                 "label": "Separar Cozinha da Sala de Estar",
-                "associated": "B"
+                "associated": "Opção B"
             },
             {
                 "label": "Expandir Cozinha/Sala de Estar para a Frente",
-                "associated": "A"
+                "associated": "Opção A"
             },
             {
                 "label": "Expandir Cozinha/Sala de Estar para Frente e Lado",
-                "associated": "C"
+                "associated": "Opção C"
             },
             {
                 "label": "Adicionar Cômodo na Frente",
-                "associated": "N"
+                "associated": "Opção N"
             },
             {
                 "label": "Adicionar Cômodo nos Fundos",
-                "associated": "null"
+                "associated": "Opção //"
             }
         ]
     },
@@ -45,23 +45,23 @@
         "combos": [
             {
                 "label": "Expandir Cozinha/Sala de Estar para a Frente",
-                "associated": "C"
+                "associated": "Opção C"
             },
             {
                 "label": "Expandir Cozinha/Sala de Estar para o Lado",
-                "associated": "E"
+                "associated": "Opção E"
             },
             {
                 "label": "Adicionar Cômodo na Frente",
-                "associated": "O"
+                "associated": "Opção o"
             },
             {
                 "label": "Adicionar Cômodo nos Fundos",
-                "associated": "null"
+                "associated": "Opção //"
             },
             {
                 "label": "Adicionar Lavanderia",
-                "associated": "F"
+                "associated": "Opção F"
             }
         ]
     },
@@ -71,15 +71,15 @@
         "combos": [
             {
                 "label": "Separar Cozinha da Sala de Estar",
-                "associated": "D"
+                "associated": "Opção D"
             },
             {
                 "label": "Expandir Cozinha/Sala de Estar para Frente e Lado",
-                "associated": "C"
+                "associated": "Opção C"
             },
             {
                 "label": "Adicionar Cômodo na Frente",
-                "associated": "P"
+                "associated": "Opção P"
             }
         ]
     },
@@ -89,27 +89,27 @@
         "combos": [
             {
                 "label": "Expandir Cozinha/Sala de Estar para a Frente",
-                "associated": "N"
+                "associated": "Opção N"
             },
             {
                 "label": "Expandir Cozinha/Sala de Estar para o Lado",
-                "associated": "O"
+                "associated": "Opção O"
             },
             {
                 "label": "Expandir Cozinha/Sala de Estar para Frente e Lado",
-                "associated": "P"
+                "associated": "Opção P"
             },
             {
                 "label": "Adicionar Cômodo na Frente",
-                "associated": "G"
+                "associated": "Opção G"
             },
             {
                 "label": "Adicionar Cômodo nos Fundos",
-                "associated": "null"
+                "associated": "Opção //"
             },
             {
                 "label": "Adicionar Lavanderia",
-                "associated": "L"
+                "associated": "Opção L"
             }
         ]
     },
@@ -119,23 +119,23 @@
         "combos": [
             {
                 "label": "Expandir Cozinha/Sala de Estar para a Frente",
-                "associated": "null"
+                "associated": "Opção //"
             },
             {
                 "label": "Expandir Cozinha/Sala de Estar para o Lado",
-                "associated": "null"
+                "associated": "Opção //"
             },
             {
                 "label": "Expandir Cozinha/Sala de Estar para Frente e Lado",
-                "associated": "null"
+                "associated": "Opção //"
             },
             {
                 "label": "Adicionar Cômodo na Frente",
-                "associated": "null"
+                "associated": "Opção //"
             },
             {
                 "label": "Adicionar Cômodo nos Fundos",
-                "associated": "H/I/J/K"
+                "associated": "Opções H/I/J/K"
             }
         ]
     },
@@ -145,15 +145,25 @@
         "combos": [
             {
                 "label": "Expandir Cozinha/Sala de Estar para o Lado",
-                "associated": "F"
+                "associated": "Opção F"
             },
             {
                 "label": "Adicionar Cômodo nos Fundos",
-                "associated": "L"
+                "associated": "Opção L"
             },
             {
                 "label": "Adicionar Lavanderia",
-                "associated": "M"
+                "associated": "Opção M"
+            }
+        ]
+    },
+    {
+        "group": "K",
+        "label": "Thing",
+        "combos": [
+            {
+                "label": "apa",
+                "associated": "opa"
             }
         ]
     }
