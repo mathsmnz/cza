@@ -4,8 +4,16 @@
       <div class="grid grid-cols-1 sm:grid-cols-5 gap-8 items-center h-full w-full">
         <!-- Imagem da capa com desfoque -->
         <div
-          class="sm:col-span-2 flex justify-center sm:border-b-2 md:border-r-2 border-black sm:justify-start h-full w-full">
-          <img alt="casa" src="/casa.png?url" class="w-full h-full object-cover" />
+          class="relative sm:col-span-2 flex justify-center sm:border-b-2 md:border-r-2 border-black sm:justify-start h-full w-full">
+          <!-- Image with blur effect -->
+          <img alt="casa" src="/casa.png?url" class="w-full h-full object-cover filter blur-sm" />
+
+          <!-- Text overlay (selectedInfo) -->
+          <div
+            class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white text-4xl font-extrabold z-10">
+            <!-- The selected info will be displayed here -->
+            {{ selectedInfo }}
+          </div>
         </div>
 
         <div class="sm:col-span-3 w-fit">
@@ -33,8 +41,8 @@
                 <div v-show="isOpen(index)" class="pl-4 mt-2">
                   <div v-for="(combo, comboIndex) in option.combos" :key="comboIndex">
                     <label class="flex items-center">
-                      <input type="checkbox" v-model="combo.selected" class="mr-2"
-                        @change="updateAssociatedOption(option.label, combo, option.group, )">
+                      <input :name="option.group" type="radio" :value="[combo, option.group]" v-model="selectedInfo"
+                        class="mr-2">
                       {{ combo.label }}
                     </label>
                   </div>
@@ -42,7 +50,9 @@
               </div>
               <div class="flex flex-row w-full gap-2 mt-4">
                 <!-- Botão para enviar o formulário -->
-                <button @click="submitForm" class="w-5/6  p-4 bg-black text-white rounded-xl">Enviar</button>
+                <button @click="submitForm" :disabled="selectedInfo.length === 0"
+                  class="w-5/6 p-4 bg-black text-white rounded-xl 
+                       disabled:text-gray-600 disabled:cursor-not-allowed disabled:bg-gray-400">Prosseguir</button>
                 <!-- Botão para resetar o formulário -->
                 <button @click="resetForm" class="p-4 bg-black text-white rounded-xl">Redefinir</button>
               </div>
@@ -56,7 +66,7 @@
 </template>
 
 <script>
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import optionsData from '@/data/optionsData.json';
 
 export default {
@@ -67,7 +77,16 @@ export default {
       combos: option.combos.map(combo => ({ ...combo, selected: false }))
     })));
 
+    const selectedInfo = ref([])
+
     console.log(options);
+
+    watch(
+      () => selectedInfo.value,
+      (newVal) => {
+        console.log(newVal)
+      }
+    )
 
     const toggleAccordion = (index) => {
       openAccordion.value = openAccordion.value === index ? null : index;
@@ -104,9 +123,10 @@ export default {
     };
 
     const resetForm = () => {
-      options.value.forEach(option => {
-        option.combos.forEach(combo => combo.selected = false);
-      });
+      // options.value.forEach(option => {
+      //   option.combos.forEach(combo => combo.selected = false);
+      // });
+      selectedInfo.value = []
     };
 
     const submitForm = () => {
@@ -122,6 +142,7 @@ export default {
 
     return {
       options,
+      selectedInfo,
       openAccordion,
       toggleAccordion,
       isOpen,
