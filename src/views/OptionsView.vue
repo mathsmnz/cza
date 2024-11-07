@@ -41,7 +41,7 @@
                 <div v-show="isOpen(index)" class="pl-4 mt-2">
                   <div v-for="(combo, comboIndex) in option.combos" :key="comboIndex">
                     <label class="flex items-center">
-                      <input :name="option.group" type="radio" :value="[combo, option.group]" v-model="selectedInfo"
+                      <input type="checkbox"
                         class="mr-2">
                       {{ combo.label }}
                     </label>
@@ -100,32 +100,7 @@ export default {
       }
     };
 
-    const updateSelections = (optionLabel, selectedCombo) => {
-      selectedCombo.selected = !selectedCombo.selected;
-
-      if (selectedCombo.selected) {
-        // Desativa as opções incompatíveis
-        options.value.forEach(option => {
-          option.combos.forEach(combo => {
-            if (combo !== selectedCombo) {
-              combo.available = false;
-            }
-          });
-        });
-      } else {
-        // Reativa todas as opções quando desmarcado
-        options.value.forEach(option => {
-          option.combos.forEach(combo => {
-            combo.available = true;
-          });
-        });
-      }
-    };
-
     const resetForm = () => {
-      // options.value.forEach(option => {
-      //   option.combos.forEach(combo => combo.selected = false);
-      // });
       selectedInfo.value = []
     };
 
@@ -147,7 +122,6 @@ export default {
       toggleAccordion,
       isOpen,
       updateAssociatedOption,
-      updateSelections,
       resetForm,
       submitForm
     };
