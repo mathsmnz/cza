@@ -1,0 +1,61 @@
+[
+    {
+        "id":"A",
+        "label":"Aumentar sala/cozinha",
+        "combos":[
+            {
+                "id":"a",
+                "label":"Para a frente",
+                "associated": ""
+            },
+            {
+                "id":"b",
+                "label":"Para a frente e lado",
+                "associated": ""
+            },
+            {
+                "id":"c",
+                "label":"Para o lado",
+                "associated": ""
+            },
+            {
+                "id":"d",
+                "label":"Acrescentar área de serviço",
+                "associated": ""
+            }
+        ]
+    },
+    {
+        "id":"B",
+        "label":"Acrescentar cômodo para os fundos",
+        "combos":[
+            {
+                "id":"a",
+                "label":"Acesso independente",
+                "associated": ""
+            },
+            {
+                "id":"b",
+                "label":"Acrescentar banheiro",
+                "associated": ""
+            }
+        ]
+    },
+    {
+        
+        "id":"C",
+        "label":"Acrescentar cômodo para os fundos",
+        "combos":[
+            {
+                "id":"a",
+                "label":"Acesso independente",
+                "associated": ""
+            },
+            {
+                "id":"b",
+                "label":"Acrescentar área de serviço",
+                "associated": ""
+            }
+        ]
+    }
+]

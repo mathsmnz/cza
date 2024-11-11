@@ -45,7 +45,8 @@ def refresh_treeviews():
 def show_combos(group_id):
     tree_combos.delete(*tree_combos.get_children())
     for combo in next((g["combos"] for g in data if g["group"] == group_id), []):
-        tree_combos.insert("", "end", values=(combo["label"], combo["associated"]))
+        compat_str = ", ".join(combo["compat"])  # Join compat list into a string for display
+        tree_combos.insert("", "end", values=(combo["label"], combo["associated"], compat_str))
 
 # Add a new group
 def add_group():
@@ -61,7 +62,7 @@ def add_combo():
         group_id = selected_group[0]
         for group in data:
             if group["group"] == group_id:
-                group["combos"].append({"label": "New Combo", "associated": "Option"})
+                group["combos"].append({"label": "New Combo", "associated": "Option", "compat": []})
                 show_combos(group_id)
                 break
     else:
@@ -108,10 +109,6 @@ def edit_cell(event):
     # Calculate the absolute position relative to the Treeview widget
     abs_x = tree.winfo_rootx() + tree.winfo_x() + x
     abs_y = tree.winfo_rooty() + tree.winfo_y() + y
-    
-    print(abs_x, tree.winfo_rootx(), tree.winfo_x(), x, sep = " ")
-    print(abs_y, tree.winfo_rooty(), tree.winfo_y(), y, sep = " ")
-
 
     # Create an entry widget directly on top of the cell
     entry = tk.Entry(root)
@@ -119,6 +116,10 @@ def edit_cell(event):
 
     # Get current cell value
     current_value = tree.item(item_id, "values")[col_num]
+    
+    if col_num == 2:  # If editing the "compat" column
+        current_value = ", ".join(current_value.split(","))
+    
     entry.insert(0, current_value)
     entry.focus()
 
@@ -147,6 +148,10 @@ def edit_cell(event):
                         group["combos"][combo_index]["label"] = new_value
                     elif col_num == 1:
                         group["combos"][combo_index]["associated"] = new_value
+                    elif col_num == 2:  # Update the compat field (third column)
+                        # Split the comma-separated values into a list of strings
+                        compat_list = [item.strip() for item in new_value.split(",")]
+                        group["combos"][combo_index]["compat"] = compat_list
                     break
 
     entry.bind("<Return>", save_edit)
@@ -174,11 +179,13 @@ tree_groups.bind("<Double-1>", edit_cell)
 tree_groups.bind("<<TreeviewSelect>>", lambda e: show_combos(tree_groups.selection()[0]))
 
 # Create Treeview for combos
-tree_combos = ttk.Treeview(right_frame, columns=("Label", "Associated Option"), show="headings", selectmode="browse", height=15)
+tree_combos = ttk.Treeview(right_frame, columns=("Label", "Associated Option", "Compat"), show="headings", selectmode="browse", height=15)
 tree_combos.heading("Label", text="Combo Label")
 tree_combos.heading("Associated Option", text="Associated Option")
+tree_combos.heading("Compat", text="Compat")
 tree_combos.column("Label", width=150)
 tree_combos.column("Associated Option", width=150)
+tree_combos.column("Compat", width=200)  # Adjust column width to fit compat data
 tree_combos.pack(fill=tk.BOTH, expand=True)
 tree_combos.bind("<Double-1>", edit_cell)
 
@@ -194,5 +201,5 @@ tk.Button(btn_frame, text="Delete Group", command=delete_group).grid(row=1, colu
 tk.Button(btn_frame, text="Add Combo", command=add_combo).grid(row=2, column=0, padx=5, pady=5, sticky="ew")
 tk.Button(btn_frame, text="Delete Combo", command=delete_combo).grid(row=2, column=1, padx=5, pady=5, sticky="ew")
 
-# Run the application
+# Start the app
 root.mainloop()
