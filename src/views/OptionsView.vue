@@ -11,13 +11,13 @@
           <!-- Text overlay (selectedInfo) -->
           <div
             class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-white text-4xl font-extrabold z-10">
-            {{ selectedInfo }}
+            {{ displayId }}
           </div>
         </div>
 
         <div class="sm:col-span-3 w-fit">
           <!-- Using the new SelectorB here -->
-          <SelectorC :optionsData="option" :selectedInfo="selectedInfo" />
+          <Selector :optionsData="option" v-model="selectedInfo" />
         </div>
 
       </div>
@@ -26,26 +26,32 @@
 </template>
 
 <script>
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import optionsData from '@/data/optionsData.json';
 import options from '@/data/options.json'
-import SelectorB from '@/components/SelectorB.vue';
-import SelectorA from '@/components/SelectorA.vue';
-import SelectorC from '@/components/SelectorC.vue';
+import Selector from '@/components/Selector.vue';
 
 export default {
   components: {
-    SelectorB,
-    SelectorA,
-    SelectorC
+    Selector
   },
   setup() {
     const selectedInfo = ref([]);
-    const optionData = ref(optionsData);
-    const option = ref(options);
+    const option = ref(options.data);
+    const displayId = ref(null);
+
+    watch(selectedInfo, (newVal) => {
+      if(newVal.length != 0){
+        const sortedCombos = [newVal].sort();
+        const fileId = btoa(sortedCombos.join(","));
+        displayId.value = fileId; 
+        console.log('DisplayID is: ',displayId.value )
+      }
+    });
 
     return {
       selectedInfo,
+      displayId,
       option,
     };
   }
