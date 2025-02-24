@@ -67,6 +67,7 @@ export default {
 
     const handleImageError = () => {
       imagePath.value = "/images/base.png"; // Set the backup image when the original fails
+      console.log("NO VALID COMBINATION FOUND");
     };
 
     return {
