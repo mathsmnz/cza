@@ -26,12 +26,6 @@
           "compat": []
         },
         {
-          "id": "bluk0i3vb",
-          "label": "Acrescentar área de serviço",
-          "associated": "cozinhaServico",
-          "compat": []
-        },
-        {
           "id": "trz113un8",
           "label": "Separar cozinha da sala",
           "associated": "separarCozinha",
@@ -56,11 +50,13 @@
           "compat": []
         },
         {
+          "id": "ph5cp8sna",
           "label": "Acrescentar cômodo para os fundos",
           "associated": "acrescentarComodoFundo",
           "compat": []
         },
         {
+          "id": "cb8carnhq",
           "label": "Expandir para o lado",
           "associated": "comodoFundoLado",
           "compat": []
@@ -78,12 +74,7 @@
           "compat": []
         },
         {
-          "id": "wrsneh877",
-          "label": "Acrescentar área de serviço",
-          "associated": "comodoFrenteServico",
-          "compat": []
-        },
-        {
+          "id": "5h868uhd6",
           "label": "Acrescentar cômodo para frente",
           "associated": "acrescentarComodoFrente",
           "compat": []
@@ -92,12 +83,11 @@
     },
     {
       "id": "D",
-      "group": "Group 4",
       "label": "Adicionar lavanderia",
       "combos": [
         {
           "label": "Adicionar Lavanderia",
-          "associated": "",
+          "associated": "adicionarLavanderia",
           "compat": []
         }
       ]
@@ -110,6 +100,9 @@
       "description": "AUMENTAR SALA/COZINHA\tPARA A FRENTE\n",
       "relatedCombos": [
         "cozinhaFrente"
+      ],
+      "relatedGroups": [
+        "A"
       ]
     },
     {
@@ -119,6 +112,9 @@
       "relatedCombos": [
         "cozinhaFrente",
         "separarCozinha"
+      ],
+      "relatedGroups": [
+        "A"
       ]
     },
     {
@@ -127,6 +123,9 @@
       "description": "AUMENTAR SALA/COZINHA\tPARA A FRENTE E PARA O LADO\n",
       "relatedCombos": [
         "cozinhaFrenteLado"
+      ],
+      "relatedGroups": [
+        "A"
       ]
     },
     {
@@ -136,43 +135,66 @@
       "relatedCombos": [
         "cozinhaFrenteLado",
         "separarCozinha"
+      ],
+      "relatedGroups": [
+        "A"
       ]
     },
     {
       "id": "d9ff2ae37b2bfd3955eb907b21c853e9145db02c29298e238ba2631e76e967d3",
       "label": "E",
       "description": "AUMENTAR SALA/COZINHA\tPARA O LADO\n",
-      "relatedCombos": []
+      "relatedCombos": [
+        "cozinhaLado"
+      ],
+      "relatedGroups": [
+        "A"
+      ]
     },
     {
-      "id": "ee827041ddc67ac06ac35086055a7929324b430db61255f61eedcdb93bb45896",
+      "id": "1b807d7a4070cbddda085a5eb2ff483f5b5eacab58a263e23ec8edea7ba95719",
       "label": "F",
       "description": "AUMENTAR SALA/COZINHA\tPARA O LADO\tADICIONAR LAVANDERIA\n",
       "relatedCombos": [
         "cozinhaLado",
-        "cozinhaServico"
+        "adicionarLavanderia"
+      ],
+      "relatedGroups": [
+        "A",
+        "D"
       ]
     },
     {
       "id": "df6de903a9d8ce7aaa63193636eeeec86a0da33dc8614a927e94e78522d30edd",
       "label": "G",
       "description": "ADICIONAR CÔMODO PARA A FRENTE\n",
-      "relatedCombos": []
+      "relatedCombos": [
+        "acrescentarComodoFrente"
+      ],
+      "relatedGroups": [
+        "C"
+      ]
     },
     {
       "id": "e01be9e0d20a63201205dfe1fed76538f47714b0964e127e83339247c07f3362",
       "label": "H",
-      "description": "",
+      "description": "ADICIONAR CÔMODO PARA OS  FUNDOS\n",
       "relatedCombos": [
         "acrescentarComodoFundo"
+      ],
+      "relatedGroups": [
+        "B"
       ]
     },
     {
       "id": "6c61bd15ec24d713f99373e9df8024d749db34937cb6d2967c2cba3c41fa90a2",
       "label": "I",
-      "description": "",
+      "description": "ADICIONAR CÔMODO PARA OS  FUNDOS\tEXPANDIR PARA O LADO\n",
       "relatedCombos": [
         "comodoFundoLado"
+      ],
+      "relatedGroups": [
+        "B"
       ]
     },
     {
@@ -181,6 +203,9 @@
       "description": "ADICIONAR CÔMODO PARA OS  FUNDOS\tINDEPENDENTE\n",
       "relatedCombos": [
         "comodoFundoIndependente"
+      ],
+      "relatedGroups": [
+        "B"
       ]
     },
     {
@@ -190,22 +215,35 @@
       "relatedCombos": [
         "comodoFundoIndependente",
         "comodoFundoBanheiro"
+      ],
+      "relatedGroups": [
+        "B"
       ]
     },
     {
-      "id": "536eb626331342cf3da16a21be133bebcea507cff00d3beb38fee7b51a77a19d",
+      "id": "25ed4c2ad27358c83499c0db1204d932f3d0d2c0ebeb0cb04b9ac9a0b29b7990",
       "label": "L",
       "description": "AUMENTAR SALA/COZINHA\tPARA A FRENTE E PARA O LADO\tADICIONAR LAVANDERIA\n",
       "relatedCombos": [
         "cozinhaFrenteLado",
-        "cozinhaServico"
+        "cozinhaServico",
+        "adicionarLavanderia"
+      ],
+      "relatedGroups": [
+        "A",
+        "D"
       ]
     },
     {
-      "id": "12",
+      "id": "caf2cf33c331a0ef4bcfb5f7e400aadaa31fe63c0e8b238a2f113b03ee9c818e",
       "label": "M",
       "description": "ADICIONAR LAVANDERIA\n",
-      "relatedCombos": []
+      "relatedCombos": [
+        "adicionarLavanderia"
+      ],
+      "relatedGroups": [
+        "D"
+      ]
     }
   ]
 }
