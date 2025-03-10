@@ -1,53 +1,48 @@
 <template>
-  <main class="h-full w-full flex items-center justify-center bg-white">
-    <div class="w-full h-full">
-      <div class="grid grid-cols-1 sm:grid-cols-5 gap-8 items-center h-full w-full">
-        <div
-          class="relative sm:col-span-2 flex justify-center align-middle sm:border-b-2 md:border-r-2 border-black sm:justify-start h-full w-full">
-          <!-- Image with blur effect -->
-          <img alt="casa" :src="imagePath" @error="handleImageError"
-            :class="imagePath === 'casa.png' ? 'object-cover' : 'object-scale-down'" />
-        </div>
+  <div class="h-full w-full overflow-auto bg-white">
+    <div class="grid h-full grid-rows-5 md:grid-rows-none md:grid-cols-5">
 
-        <div class="sm:col-span-3 w-fit">
-          <!-- Using the new SelectorB here -->
-          <OptionSelector :optionsData="option" :selectionsData="selections" v-model="selectedInfo" />
-        </div>
+      <!-- Left Panel (Image) -->
+      <div
+        class="border-b-2 max-h-dvh border-black md:border-r-2 md:border-b-0 flex justify-center items-center row-span-1 md:col-span-2">
+        <img alt="casa" class="object-scale-down md:max-h-dvh rotate-90 md:rotate-0" :src="imagePath" @error="handleImageError" />
       </div>
+
+      <!-- Right Panel (Options) -->
+      <div class="row-span-4 md:col-span-3">
+        <OptionSelector :optionsData="option" :selectionsData="selections" v-model="selectedInfo"
+          class="md:h-full md:w-full" />
+      </div>
+
     </div>
-  </main>
+  </div>
 </template>
 
 <script>
 import { ref, watch } from 'vue'
 import options from '@/data/options.json'
 import OptionSelector from '@/components/OptionSelector.vue'
+import { useDataStore } from '@/stores/data'
 
 export default {
   components: {
     OptionSelector,
   },
   setup() {
+    const store = useDataStore();
     const selectedInfo = ref([])
     const option = ref(options.data)
     const selections = ref(options.selections)
     const displayId = ref('')
     const imagePath = ref('')
 
-    async function getSelectionId(selection) {
-      const enconder = new TextEncoder()
-      const encodedText = enconder.encode(selection)
-      const hash = await window.crypto.subtle.digest('SHA-256', encodedText)
-      const hashArray = Array.from(new Uint8Array(hash)) // convert buffer to byte array
-      // convert bytes to hex string
-      return hashArray.map((b) => b.toString(16).padStart(2, '0')).join('')
-    }
-
     watch(selectedInfo, (newVal) => {
       if (newVal.length !== 0) {
         const sortedCombos = [newVal].sort()
         //const fileId = btoa(sortedCombos.join(","));
-        getSelectionId(sortedCombos.join(',')).then((uniqueId) => (displayId.value = uniqueId))
+        store.getSelectionId(sortedCombos.join(',')).then((uniqueId) => {
+          return (displayId.value = uniqueId)
+        })
         console.log('DisplayID is: ', displayId.value)
       }
     })

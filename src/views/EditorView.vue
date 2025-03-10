@@ -4,6 +4,7 @@ import * as WEBIFC from "web-ifc";
 import * as THREE from "three";
 import * as OBC from "@thatopen/components";
 import * as OBCF from "@thatopen/components-front";
+import { useDataStore } from '@/stores/data'
 
 export default {
   setup() {
@@ -20,6 +21,8 @@ export default {
     let modelItems = [];
     let classifier = null;
     let grid = null;
+
+    const store = useDataStore();
 
     // Setup world (scene, camera, renderer, etc.)
     const setupWorld = async () => {
@@ -50,38 +53,60 @@ export default {
 
     const captureScreenshot = async () => {
       if (!world || !world.renderer || !container.value) return;
-      // Esconde o grid antes da captura
-      if (grid) grid.three.visible = false;
+
+      // Hide the grid before capturing
+      if (grid) grid.visible = false;
 
       let activePlan = plans.value.current;
-      console.log(activePlan);
       if (!activePlan) {
         activePlan = plans.value.list[0];
         console.warn("Nenhuma planta ativa para captura.");
       }
 
-      console.log(activePlan)
 
-      // Ajusta a câmera para maximizar o zoom no plano ativo
-      await fitToPlanView();
+      // Store original background color and resolution settings
+      const originalClearColor = world.renderer.three.getClearColor(new THREE.Color());
+      const originalAlpha = world.renderer.three.getClearAlpha();
+      const originalPixelRatio = world.renderer.three.getPixelRatio();
+      const originalSize = new THREE.Vector2();
+      world.renderer.three.getSize(originalSize);
 
-      // Pequeno delay para garantir que a cena seja atualizada antes da captura
-      await new Promise(resolve => setTimeout(resolve, 500));
+      // Set transparent background
+      world.renderer.three.setClearColor(0x000000, 0);
 
-      // Renderiza a cena
+      // Increase screenshot resolution (e.g., 2x or 4x the original size)
+      const scaleFactor = 2; // Change to 3 or 4 for even higher quality
+      const width = originalSize.x * scaleFactor;
+      const height = originalSize.y * scaleFactor;
+
+      // Set renderer size and pixel ratio for better quality
+      world.renderer.three.setPixelRatio(window.devicePixelRatio * scaleFactor);
+      world.renderer.three.setSize(width, height, false);
+
+      fitToPlanView();
+
+      // Render the scene at high resolution
       world.renderer.three.render(world.scene.three, world.camera.three);
 
-      // Captura a imagem
-      const screenshot = container.value.querySelector('canvas').toDataURL('image/png');
-      const link = document.createElement('a');
+      // Capture the image at high resolution
+      const screenshot = container.value.querySelector("canvas").toDataURL("image/png");
+
+      // Restore original renderer settings
+      world.renderer.three.setClearColor(originalClearColor, originalAlpha);
+      world.renderer.three.setPixelRatio(originalPixelRatio);
+      world.renderer.three.setSize(originalSize.x, originalSize.y, false);
+
+      // Restore grid visibility
+      if (grid) grid.visible = true;
+
+      // Download the image
+      const link = document.createElement("a");
       link.href = screenshot;
       const screenshotName = fileName.split(".")[0];
       link.download = `${screenshotName}.png`;
       link.click();
-
-      // Restaura a visibilidade do grid após a captura
-      if (grid) grid.three.visible = true;
     };
+
 
     // Função que ajusta o zoom no plano antes da captura
     const fitToPlanView = async (offset = .2) => {
@@ -282,11 +307,13 @@ export default {
 
       setupGrid(world); // Setup grid in the scene
 
+      const selectedModel = store.selectionID
+
       // Load and add the IFC model to the scene
-      const url = "https://raw.githubusercontent.com/mathsmnz/cza/refs/heads/main/public/base.ifc";
+      const url = `/ifcs/${selectedModel}.ifc`;
       model = await loadIfcModel(url); // Store the loaded model
       world.scene.three.add(model); // Add model to the scene
-      fileName = "EXAMPLE"
+      fileName = `${selectedModel}`;
 
       highlighter.setup({ world });
       highlighter.zoomToSelection = true;

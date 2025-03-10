@@ -3,12 +3,12 @@ import NavBar from './components/NavBar.vue';
 </script>
 
 <template>
-  <div class="flex flex-col h-screen font-montserrat">
+  <div class="flex flex-col grow h-screen w-screen font-montserrat">
     <header>
       <NavBar />
     </header>
 
-    <main class="flex grow">
+    <main class="overflow-hidden h-full">
       <RouterView />
     </main>
   </div>

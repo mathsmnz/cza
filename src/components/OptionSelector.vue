@@ -1,5 +1,5 @@
 <template>
-    <div class="w-full flex flex-col gap-2 p-6 bg-gray-100 outline-black outline-2">
+    <div class="flex flex-col gap-2 p-6 bg-gray-100 outline-black outline-2">
         <!-- Section Header -->
         <div class="text-center">
             <h1 class="text-3xl font-bold text-gray-800">Escolha o Tipo de Mudança</h1>
@@ -56,6 +56,7 @@
 <script>
 import { ref, watch } from "vue";
 import { useRouter } from "vue-router";
+import { useDataStore } from '@/stores/data'
 
 export default {
     props: {
@@ -75,6 +76,7 @@ export default {
     emits: ["update:modelValue"], // Declara o evento para v-model
     setup(props, { emit }) {
         const router = useRouter();
+        const store = useDataStore();
         const options = ref(props.optionsData);
         const selections = ref(props.selectionsData);
         const selectedGroups = ref([]);
@@ -122,8 +124,6 @@ export default {
             activeCombos.value = [...newActiveCombos];
         };
 
-
-
         // Observa mudanças nos grupos selecionados
         watch(selectedGroups, updateActiveGroups);
 
@@ -143,6 +143,7 @@ export default {
         const submitForm = () => {
             console.log("Formulário enviado!", selectedCombos.value);
             alert("Formulário enviado! Verifique o console para detalhes.");
+            console.log(store.selectionID);
             router.push("/editor");
         };
 
