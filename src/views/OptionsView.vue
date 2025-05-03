@@ -4,8 +4,11 @@
 
       <!-- Left Panel (Image) -->
       <div
-        class="border-b-2 max-h-dvh border-black md:border-r-2 md:border-b-0 flex justify-center items-center row-span-1 md:col-span-2">
-        <img alt="casa" class="object-scale-down md:max-h-dvh rotate-90 md:rotate-0" :src="imagePath" @error="handleImageError" />
+        class="border-b-2 border-black md:border-r-2 md:border-b-0 flex justify-center items-center row-span-1 md:col-span-2 p-4">
+        <div class="relative w-full h-full flex items-center justify-center">
+          <img alt="casa" class="w-auto h-auto max-w-full max-h-full object-contain md:rotate-90 rotate-0"
+            :src="imagePath" @error="handleImageError" />
+        </div>
       </div>
 
       <!-- Right Panel (Options) -->

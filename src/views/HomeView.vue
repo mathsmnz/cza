@@ -10,7 +10,7 @@
         </div>
 
         <!-- Texto e informações -->
-        <div class="sm:col-span-3">
+        <div class="sm:col-span-3 px-8">
           <h1 class="text-5xl font-semibold">CZA+</h1>
           <br>
 
