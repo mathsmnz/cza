@@ -73,7 +73,6 @@ export function useEditorModel() {
 
   function _setupGizmoClickAlign(
     renderer: THREE.WebGLRenderer,
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     controls: any,
     faceState: FaceState,
   ): () => void {
@@ -844,7 +843,6 @@ export function useEditorModel() {
     const radius = Math.max(sceneSize.x, sceneSize.y, sceneSize.z) * offset * scaleFactor
     const sphere = new THREE.Sphere(sceneCenter, radius)
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const controls = world.camera.controls as any
 
     if (typeof controls?.fitToSphere !== 'function') {
