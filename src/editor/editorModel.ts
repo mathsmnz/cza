@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import * as WEBIFC from 'web-ifc'
 import * as THREE from 'three'
 import * as OBC from '@thatopen/components'
@@ -59,17 +61,91 @@ export function useEditorModel() {
   let currentCanvasLeft = 0
   let currentCanvasTop = 0
 
+  type FaceState = {
+    isIntersecting: boolean
+    faceIndex: number
+  }
+
+  const faceState = {
+    isIntersecting: false,
+    faceIndex: -1,
+  }
+
+  function _setupGizmoClickAlign(
+    renderer: THREE.WebGLRenderer,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    controls: any,
+    faceState: FaceState,
+  ): () => void {
+    const domElement = renderer.domElement
+
+    const faceDirections: Record<number, THREE.Vector3> = {
+      0: new THREE.Vector3(1, 0, 0), // RIGHT
+      1: new THREE.Vector3(-1, 0, 0), // LEFT
+      2: new THREE.Vector3(0, 1, 0), // TOP
+      3: new THREE.Vector3(0, -1, 0), // BOTTOM
+      4: new THREE.Vector3(0, 0, 1), // FRONT
+      5: new THREE.Vector3(0, 0, -1), // BACK
+    }
+
+    const onClick = () => {
+      if (!faceState.isIntersecting || faceState.faceIndex === null) return
+
+      console.log(faceState)
+
+      const materialIndex = Math.floor(faceState.faceIndex / 2)
+      const dir = faceDirections[materialIndex]
+      if (!dir) return
+
+      // Get current camera position and target
+      const currentPosition = new THREE.Vector3()
+      const currentTarget = new THREE.Vector3()
+      controls.getPosition(currentPosition)
+      controls.getTarget(currentTarget)
+
+      // Compute distance from current camera to target
+      const distance = currentPosition.distanceTo(currentTarget)
+
+      // New camera position: move in the face direction from target
+      const newPosition = dir.clone().normalize().multiplyScalar(distance).add(currentTarget)
+
+      // Smooth transition to new position
+      controls.setLookAt(
+        newPosition.x,
+        newPosition.y,
+        newPosition.z,
+        currentTarget.x,
+        currentTarget.y,
+        currentTarget.z,
+        true, // smooth transition
+      )
+    }
+
+    domElement.addEventListener('click', onClick)
+
+    return () => {
+      domElement.removeEventListener('click', onClick)
+      console.log('Gizmo face click-to-align removed')
+    }
+  }
+
   // The highlighting function, adjusted to use the dynamic viewport bounds in canvas top-left coords
   function _setupGizmoHighlighting(
     cube: THREE.Mesh<THREE.BoxGeometry, THREE.MeshBasicMaterial[]>,
     camera: THREE.OrthographicCamera,
     renderer: THREE.WebGLRenderer,
     scene: THREE.Scene,
+    controls: any,
   ): () => void {
     const raycaster = new THREE.Raycaster()
+    raycaster.params.Mesh.threshold = 0.1
+
     const mouse = new THREE.Vector2()
 
-    // State variables for highlighting (if you re-enable highlighting later)
+    console.log(controls)
+
+    const removeClickAlign = _setupGizmoClickAlign(renderer, controls, faceState)
+
     let highlightedFaceIndex: number = -1
     let originalFaceMaterial: THREE.Material | null = null
 
@@ -79,120 +155,104 @@ export function useEditorModel() {
       opacity: 0.7,
     })
 
+    // Marker sphere to visualize hit
+    const marker = new THREE.Mesh(
+      new THREE.SphereGeometry(0.01, 8, 8),
+      new THREE.MeshBasicMaterial({ color: 0xff0000 }),
+    )
+    marker.visible = false
+    scene.add(marker)
+
     const domElement = renderer.domElement
 
     const onMouseMove = (event: MouseEvent) => {
-      // Get mouse position relative to the canvas element's top-left corner
-      // Use stored canvas offset for accuracy
       const mouseCanvasX = event.clientX - currentCanvasLeft
       const mouseCanvasY = event.clientY - currentCanvasTop
 
-      // Check if the mouse is within the gizmo's rendered viewport area
-      // Use the correctly calculated viewport bounds in canvas top-left coordinates
       if (
         mouseCanvasX >= currentViewportLeft_tl &&
         mouseCanvasX < currentViewportRight_tl &&
         mouseCanvasY >= currentViewportTop_tl &&
         mouseCanvasY < currentViewportBottom_tl
       ) {
-        // If inside the viewport, calculate mouse position relative to the viewport's top-left
         const mouseViewportX = mouseCanvasX - currentViewportLeft_tl
         const mouseViewportY = mouseCanvasY - currentViewportTop_tl
 
-        // Normalize mouse coordinates within the viewport dimensions (-1 to +1 range)
-        // The viewport size is (Right - Left) or (Bottom - Top)
         const viewportWidth = currentViewportRight_tl - currentViewportLeft_tl
         const viewportHeight = currentViewportBottom_tl - currentViewportTop_tl
 
         mouse.x = (mouseViewportX / viewportWidth) * 2 - 1
-        mouse.y = -(mouseViewportY / viewportHeight) * 2 + 1 // Y is inverted for normalized coordinates
+        mouse.y = -(mouseViewportY / viewportHeight) * 2 + 1
 
-        // Update the raycaster using the overlay camera and the mouse position normalized to the viewport
         raycaster.setFromCamera(mouse, camera)
+        const intersects = raycaster.intersectObject(cube, false)
 
-        // Perform raycasting against the cube and its children
-        const intersects = raycaster.intersectObjects([cube], false)
-
-        // --- Highlighting / Logging Logic (re-add as needed) ---
         if (intersects.length > 0) {
-          // Example: Log the intersected object
-          console.log(
-            'Intersected Gizmo Child:',
-            intersects[0].object.name || intersects[0].object.type,
-            intersects[0],
-          )
-
-          // Add your highlighting logic here if you want to visually highlight
-
           const intersect = intersects[0]
-          const faceIndex =
-            intersect.faceIndex !== undefined && intersect.faceIndex !== null
-              ? intersect.faceIndex
-              : -1
+          const faceIndex = intersect.faceIndex ?? -1
 
-          console.log(faceIndex !== null)
+          faceState.isIntersecting = true
+          // @ts-expect-error the field will be generated during runtime
+          faceState.faceIndex = intersects[0].faceIndex
 
-          if (faceIndex !== undefined) {
-            if (highlightedFaceIndex !== faceIndex) {
-              if (highlightedFaceIndex !== null && originalFaceMaterial) {
+          if (faceIndex !== -1) {
+            const materialIndex = Math.floor(faceIndex / 2)
+
+            if (highlightedFaceIndex !== materialIndex) {
+              if (highlightedFaceIndex !== -1 && originalFaceMaterial) {
                 ;(cube.material as THREE.Material[])[highlightedFaceIndex] = originalFaceMaterial
               }
-              highlightedFaceIndex = faceIndex
-              originalFaceMaterial = (cube.material as THREE.Material[])[faceIndex]
-              ;(cube.material as THREE.Material[])[faceIndex] = highlightMaterial
-              renderer.render(scene, camera)
+
+              highlightedFaceIndex = materialIndex
+              originalFaceMaterial = (cube.material as THREE.Material[])[materialIndex]
+              ;(cube.material as THREE.Material[])[materialIndex] = highlightMaterial
             }
-          } else {
-            // Intersected something other than a face
-            if (highlightedFaceIndex !== null && originalFaceMaterial) {
-              ;(cube.material as THREE.Material[])[highlightedFaceIndex] = originalFaceMaterial
-              highlightedFaceIndex = -1
-              originalFaceMaterial = null
-              renderer.render(scene, camera)
-            }
+
+            // Move and show marker
+            marker.position.copy(intersect.point)
+            marker.visible = true
+            renderer.render(scene, camera)
           }
         } else {
-          // Mouse is in the viewport but not intersecting any object
-          // Remove highlight if mouse is in viewport but not over an object
+          console.log('outside the viewport')
 
-          if (highlightedFaceIndex !== null && originalFaceMaterial) {
+          // No intersection
+          if (highlightedFaceIndex !== -1 && originalFaceMaterial) {
             ;(cube.material as THREE.Material[])[highlightedFaceIndex] = originalFaceMaterial
             highlightedFaceIndex = -1
             originalFaceMaterial = null
-            renderer.render(scene, camera)
+            faceState.isIntersecting = false
+            faceState.faceIndex = -1
           }
 
-          console.log('Mouse in gizmo viewport, but no object intersected')
-        }
-      } else {
-        // Mouse is outside the gizmo's viewport area
-        // Ensure highlight is removed if the mouse leaves the active area
-
-        if (highlightedFaceIndex !== null && originalFaceMaterial) {
-          ;(cube.material as THREE.Material[])[highlightedFaceIndex] = originalFaceMaterial
-          highlightedFaceIndex = null
-          originalFaceMaterial = null
+          marker.visible = false
           renderer.render(scene, camera)
         }
+      } else {
+        // Outside viewport
+        if (highlightedFaceIndex !== -1 && originalFaceMaterial) {
+          ;(cube.material as THREE.Material[])[highlightedFaceIndex] = originalFaceMaterial
+          highlightedFaceIndex = -1
+          originalFaceMaterial = null
+        }
 
-        console.log('Mouse outside gizmo viewport')
+        marker.visible = false
+        renderer.render(scene, camera)
       }
     }
 
-    // Add the mousemove listener
     domElement.addEventListener('mousemove', onMouseMove)
 
-    // Return a function to clean up
     return () => {
       domElement.removeEventListener('mousemove', onMouseMove)
-      if (highlightedFaceIndex !== null && originalFaceMaterial) {
+      if (highlightedFaceIndex !== -1 && originalFaceMaterial) {
         ;(cube.material as THREE.Material[])[highlightedFaceIndex] = originalFaceMaterial
       }
+      scene.remove(marker)
       console.log('Gizmo highlighting event listener removed.')
     }
   }
 
-  // Your _setupGizmo function - updated to store correct viewport bounds
   function _setupGizmo() {
     const overlayScene = new THREE.Scene()
     const overlayCam = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 10)
@@ -354,6 +414,7 @@ export function useEditorModel() {
         overlayCam,
         world.renderer.three,
         overlayScene,
+        world.camera.controls,
       )
 
       // Store canvas position initially
@@ -371,15 +432,8 @@ export function useEditorModel() {
       }
       window.addEventListener('resize', updateCanvasPosition)
 
-      // Remember to remove the resize listener when disposing of the gizmo
-      // Example dispose function:
-      // const disposeGizmo = () => {
-      //    disposeHighlighting(); // Dispose the highlighting listener
-      //    window.removeEventListener('resize', updateCanvasPosition); // Remove resize listener
-      // Dispose other THREE.js objects (geometry, materials, etc.)
-      // };
-
       world.renderer.onAfterUpdate.add(() => {
+        // @ts-expect-error the field will be generated during runtime
         const renderer = world.renderer.three
         const canvasSize = renderer.getSize(new THREE.Vector2())
         const pixelRatio = renderer.getPixelRatio()
@@ -399,7 +453,8 @@ export function useEditorModel() {
         currentViewportBottom_tl = canvasSize.y - viewportBottom_bl // Convert Y bottom edge to canvas top-left
 
         // Sync orientation
-        cube.quaternion.copy(world.camera.three.quaternion).invert()
+        const cameraQuat = world.camera.three.getWorldQuaternion(new THREE.Quaternion())
+        cube.quaternion.copy(cameraQuat).invert() // Correct if cube should face the camera
 
         renderer.autoClear = false
         renderer.clearDepth()
