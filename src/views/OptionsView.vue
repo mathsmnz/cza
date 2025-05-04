@@ -21,7 +21,7 @@
   </div>
 </template>
 
-<script lang="ts">
+<script>
 import { ref, watch } from 'vue'
 import options from '@/data/options.json'
 import OptionSelector from '@/components/OptionSelector.vue'

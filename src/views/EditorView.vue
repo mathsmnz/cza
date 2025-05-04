@@ -47,7 +47,7 @@
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup>
 import { ref, onMounted } from 'vue'
 import { useEditorController } from '@/editor/editorController'
 import { useDataStore } from '@/stores/data.js'
