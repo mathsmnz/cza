@@ -21,6 +21,7 @@ export function useEditorController(container: Ref<HTMLDivElement | null>) {
    */
   async function setupEditor(initialIfc: string) {
     if (container.value) {
+      console.log("Setting up editor for:", initialIfc)
       await setupFragments()
       await setupScene(initialIfc, container.value)
     } else {

@@ -47,7 +47,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { useEditorController } from '@/editor/editorController'
 import { useDataStore } from '@/stores/data.js'
@@ -71,7 +71,7 @@ const {
 
 // Setup scene on mount
 onMounted(() => {
-  console.log(plans)
+  console.log(store.selectionID)
   setupEditor(store.selectionID)
 })
 

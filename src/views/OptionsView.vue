@@ -1,13 +1,15 @@
 <template>
   <div class="h-full w-full overflow-auto bg-white">
-    <div class="grid h-full grid-rows-5 md:grid-rows-none md:grid-cols-5">
+    <div class="grid min-h-screen h-full grid-rows-5 md:grid-rows-none md:grid-cols-5">
 
       <!-- Left Panel (Image) -->
       <div
-        class="border-b-2 border-black md:border-r-2 md:border-b-0 flex justify-center items-center row-span-1 md:col-span-2 p-4">
+        class="border-b-2 border-black h-48 md:w-full md:h-dvh md:border-r-2 md:border-b-0 flex justify-center items-center row-span-1 md:col-span-2 p-2">
         <div class="relative w-full h-full flex items-center justify-center">
-          <img alt="casa" class="w-auto h-auto max-w-full max-h-full object-contain md:rotate-90 rotate-0"
-            :src="imagePath" @error="handleImageError" />
+          <!-- Hidden image to load and draw -->
+          <img ref="rawImage" alt="casa" :src="imagePath" @error="handleImageError" @load="rotateImage"
+            class="hidden" />
+          <canvas ref="canvas" class="max-w-full max-h-full"></canvas>
         </div>
       </div>
 
@@ -22,7 +24,7 @@
 </template>
 
 <script>
-import { ref, watch } from 'vue'
+import { ref, watch, onMounted, onBeforeUnmount } from 'vue'
 import options from '@/data/options.json'
 import OptionSelector from '@/components/OptionSelector.vue'
 import { useDataStore } from '@/stores/data'
@@ -32,21 +34,35 @@ export default {
     OptionSelector,
   },
   setup() {
-    const store = useDataStore();
+    const store = useDataStore()
     const selectedInfo = ref([])
     const option = ref(options.data)
     const selections = ref(options.selections)
     const displayId = ref('')
     const imagePath = ref('')
+    const rawImage = ref(null)
+    const canvas = ref(null)
+    const isMdOrLarger = ref(window.matchMedia('(min-width: 768px)').matches)
+
+    // Update isMdOrLarger on resize
+    const handleResize = () => {
+      isMdOrLarger.value = window.matchMedia('(min-width: 768px)').matches
+      rotateImage() // re-draw on resize
+    }
+
+    onMounted(() => {
+      window.addEventListener('resize', handleResize)
+    })
+    onBeforeUnmount(() => {
+      window.removeEventListener('resize', handleResize)
+    })
 
     watch(selectedInfo, (newVal) => {
       if (newVal.length !== 0) {
         const sortedCombos = [newVal].sort()
-        //const fileId = btoa(sortedCombos.join(","));
         store.getSelectionId(sortedCombos.join(',')).then((uniqueId) => {
-          return (displayId.value = uniqueId)
+          displayId.value = uniqueId
         })
-        console.log('DisplayID is: ', displayId.value)
       }
     })
 
@@ -56,9 +72,40 @@ export default {
     })
 
     const handleImageError = () => {
-      imagePath.value = "/images/base.png"; // Set the backup image when the original fails
-      console.log("NO VALID COMBINATION FOUND");
-    };
+      imagePath.value = '/images/base.png'
+      console.log('NO VALID COMBINATION FOUND')
+    }
+
+    const rotateImage = () => {
+      const img = rawImage.value
+      const canvasEl = canvas.value
+      if (!img || !canvasEl) return
+      const ctx = canvasEl.getContext('2d')
+
+      if (!img.complete || img.naturalWidth === 0) return
+
+      if (isMdOrLarger.value) {
+        // Rotate 90° for md and up
+        canvasEl.width = img.naturalHeight
+        canvasEl.height = img.naturalWidth
+
+        ctx.save()
+        ctx.clearRect(0, 0, canvasEl.width, canvasEl.height)
+        ctx.translate(canvasEl.width / 2, canvasEl.height / 2)
+        ctx.rotate(90 * Math.PI / 180)
+        ctx.drawImage(img, -img.naturalWidth / 2, -img.naturalHeight / 2)
+        ctx.restore()
+      } else {
+        // No rotation for small screens
+        canvasEl.width = img.naturalWidth
+        canvasEl.height = img.naturalHeight
+
+        ctx.save()
+        ctx.clearRect(0, 0, canvasEl.width, canvasEl.height)
+        ctx.drawImage(img, 0, 0)
+        ctx.restore()
+      }
+    }
 
     return {
       selectedInfo,
@@ -67,11 +114,15 @@ export default {
       selections,
       imagePath,
       handleImageError,
+      rawImage,
+      canvas,
+      rotateImage,
+      isMdOrLarger,
     }
   },
 }
 </script>
 
 <style scoped>
-/* Estilos personalizados, se necessário */
+/* Add custom styles here if needed */
 </style>
