@@ -71,8 +71,8 @@ const {
 
 // Setup scene on mount
 onMounted(() => {
-  console.log(store.selectionID)
-  setupEditor(store.selectionID.value)
+  const selectionStr = store.selectionID
+  setupEditor(selectionStr)
 })
 
 </script>

@@ -5,7 +5,7 @@ declare module '@/stores/data.js' {
   
     export const useDataStore: () => {
       currentSelection: Ref<Selection>
-      selectionID: Ref<string>
+      selectionID: string
   
       getSelectionId: (selection: string) => Promise<string>
       getCurrentSelection: () => Selection
