@@ -72,7 +72,7 @@ const {
 // Setup scene on mount
 onMounted(() => {
   console.log(store.selectionID)
-  setupEditor(store.selectionID)
+  setupEditor(store.selectionID.value)
 })
 
 </script>
