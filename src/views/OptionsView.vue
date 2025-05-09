@@ -10,6 +10,12 @@
           <img ref="rawImage" alt="casa" :src="imagePath" @error="handleImageError" @load="rotateImage"
             class="hidden" />
           <canvas ref="canvas" class="max-w-full max-h-full"></canvas>
+
+          <!-- Overlay message on invalid image -->
+          <div v-if="isInvalidCombination"
+            class="absolute inset-0 bg-black bg-opacity-60 flex items-center justify-center text-white text-center p-4 text-lg font-semibold z-10">
+            Combinação inválida, tente novamente
+          </div>
         </div>
       </div>
 
@@ -43,11 +49,11 @@ export default {
     const rawImage = ref(null)
     const canvas = ref(null)
     const isMdOrLarger = ref(window.matchMedia('(min-width: 768px)').matches)
+    const isInvalidCombination = ref(false)
 
-    // Update isMdOrLarger on resize
     const handleResize = () => {
       isMdOrLarger.value = window.matchMedia('(min-width: 768px)').matches
-      rotateImage() // re-draw on resize
+      rotateImage()
     }
 
     onMounted(() => {
@@ -73,6 +79,7 @@ export default {
 
     const handleImageError = () => {
       imagePath.value = '/images/base.png'
+      isInvalidCombination.value = true
       console.log('NO VALID COMBINATION FOUND')
     }
 
@@ -84,8 +91,12 @@ export default {
 
       if (!img.complete || img.naturalWidth === 0) return
 
+      // If it's not the fallback image, remove the overlay
+      if (imagePath.value !== '/images/base.png') {
+        isInvalidCombination.value = false
+      }
+
       if (isMdOrLarger.value) {
-        // Rotate 90° for md and up
         canvasEl.width = img.naturalHeight
         canvasEl.height = img.naturalWidth
 
@@ -96,7 +107,6 @@ export default {
         ctx.drawImage(img, -img.naturalWidth / 2, -img.naturalHeight / 2)
         ctx.restore()
       } else {
-        // No rotation for small screens
         canvasEl.width = img.naturalWidth
         canvasEl.height = img.naturalHeight
 
@@ -118,6 +128,7 @@ export default {
       canvas,
       rotateImage,
       isMdOrLarger,
+      isInvalidCombination,
     }
   },
 }
