@@ -1,9 +1,27 @@
 import { defineStore } from 'pinia'
-import { ref, watch } from 'vue'
+import { ref, reactive, watch } from 'vue'
+import { v4 as uuidv4 } from 'uuid'
 
 export const useDataStore = defineStore('data', () => {
   const currentSelection = ref([])
   const selectionID = ref('')
+
+  // Session-only telemetry
+  const sessionUserID = uuidv4()
+  const sessionStartTime = Date.now()
+
+  const telemetry = reactive({
+    userID: sessionUserID,
+    sessionStart: sessionStartTime,
+    groupSelections: {},
+    comboSelections: {},
+    formSubmissions: 0,
+    finalSelection: {},
+    formResets: 0,
+    get elapsedTime() {
+      return Date.now() - this.sessionStart
+    },
+  })
 
   // Utility: Try loading from localStorage if empty
   function restoreFromLocalStorage() {
@@ -39,7 +57,7 @@ export const useDataStore = defineStore('data', () => {
     localStorage.setItem('selectionID', newVal)
   })
 
-  // Hashing and ID logic
+  // Selection ID hashing
   async function getSelectionId(selection) {
     setCurrentSelection(selection)
     const encoder = new TextEncoder()
@@ -74,6 +92,29 @@ export const useDataStore = defineStore('data', () => {
   // Initial restore in case store is imported but not accessed yet
   restoreFromLocalStorage()
 
+  // Telemetry helpers
+  function trackGroupSelection(groupID) {
+    telemetry.groupSelections[groupID] ??= 0
+    telemetry.groupSelections[groupID]++
+  }
+
+  function trackComboSelection(comboID) {
+    telemetry.comboSelections[comboID] ??= 0
+    telemetry.comboSelections[comboID]++
+  }
+
+  function trackFormSubmission() {
+    telemetry.formSubmissions++
+  }
+
+  function trackFormReset() {
+    telemetry.formResets++
+  }
+
+  function setFinalSelection(selection) {
+    telemetry.finalSelection = selection
+  }
+
   return {
     currentSelection,
     selectionID,
@@ -82,5 +123,11 @@ export const useDataStore = defineStore('data', () => {
     getSelectionID,
     setCurrentSelection,
     setSelectionID,
+    telemetry,
+    trackGroupSelection,
+    trackComboSelection,
+    trackFormSubmission,
+    trackFormReset,
+    setFinalSelection,
   }
 })

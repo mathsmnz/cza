@@ -12,6 +12,23 @@ declare module '@/stores/data.js' {
       getSelectionID: () => string
       setCurrentSelection: (value: Selection) => void
       setSelectionID: (value: string) => void
+  
+      telemetry: {
+        userID: string
+        sessionStart: number
+        groupSelections: Record<string, number>
+        comboSelections: Record<string, number>
+        formSubmissions: number
+        finalSelection: string[]
+        formResets: number
+        elapsedTime: number
+      }
+  
+      trackGroupSelection: (groupID: string) => void
+      trackComboSelection: (comboID: string) => void
+      trackFormSubmission: () => void
+      trackFormReset: () => void
+      setFinalSelection: (selection: string[]) => void
     }
   
     export default useDataStore
