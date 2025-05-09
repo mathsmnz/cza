@@ -14,7 +14,7 @@
           <!-- Overlay message on invalid image -->
           <div v-if="isInvalidCombination"
             class="absolute inset-0 bg-black bg-opacity-60 flex items-center justify-center text-white text-center p-4 text-lg font-semibold z-10">
-            Combinação inválida, tente novamente
+            Nenhuma combinação selecionada ou inválida. Experimente outras opções.
           </div>
         </div>
       </div>
