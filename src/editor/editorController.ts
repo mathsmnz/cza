@@ -12,14 +12,18 @@ export function useEditorController(container: Ref<HTMLDivElement | null>) {
     activatePlan,
     exitPlanView,
     captureScreenshot,
+    isFileReady,
   } = useEditorModel()
 
   const plans = getPlans()
+  const isEditorReady = isFileReady
+
 
   /**
    * Initializes the editor with a default IFC file (e.g., 'base.ifc')
    */
   async function setupEditor(initialIfc: string) {
+  
     if (container.value) {
       console.log("Setting up editor for:", initialIfc)
       await setupFragments()
@@ -87,5 +91,6 @@ export function useEditorController(container: Ref<HTMLDivElement | null>) {
     selectPlan,
     resetPlanView,
     captureView,
+    isEditorReady
   }
 }

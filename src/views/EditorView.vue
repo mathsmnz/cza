@@ -1,7 +1,14 @@
 <template>
   <div class="bg-gray-900 text-white h-full w-full relative">
-    <!-- Viewer Container -->
-    <div ref="viewerContainer" class="fixed h-full w-full z-0"></div>
+    <!-- Loading state for the editor -->
+    <div ref="viewerContainer" class="fixed h-full w-full z-0">
+      <!-- Loading Overlay -->
+      <div v-if="!isEditorReady" class="absolute inset-0 flex justify-center items-center bg-gray-800 bg-opacity-50 z-20 gap-5">
+        <!-- Loading Spinner -->
+        <div class="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500 border-solid"></div>
+        <p class="text-gray-300 mt-4">Carregando o modelo...</p> <!-- Loading message -->
+      </div>
+    </div>
 
     <!-- Menu Lateral -->
     <div id="menuLateral" class="relative top-0 left-0 w-72 h-full bg-gray-800 p-4 shadow-lg overflow-y-auto z-10">
@@ -47,6 +54,7 @@
   </div>
 </template>
 
+
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { useEditorController } from '@/editor/editorController'
@@ -64,6 +72,7 @@ const {
   setupEditor,
   loadFromFile,
   exportFragments,
+  isEditorReady,
   selectPlan,
   resetPlanView,
   captureView

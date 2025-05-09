@@ -25,6 +25,7 @@ export function useEditorModel() {
   const classifier = components.get(OBC.Classifier)
   const plans = components.get(OBCF.Plans)
   const reactivePlansList = ref<OBCF.PlanView[]>([])
+  const isFileReady = ref(false)
 
   async function _setupWorld(container: HTMLElement) {
     const worlds = _getWorld()
@@ -530,6 +531,7 @@ export function useEditorModel() {
       const file = target.files[0]
 
       try {
+        isFileReady.value = false
         const buffer = new Uint8Array(await file.arrayBuffer())
 
         if (!world) {
@@ -549,6 +551,8 @@ export function useEditorModel() {
         await _setupBoundingBox(loadedModel)
         await _planManager()
         await _setupStyling()
+
+        isFileReady.value = true
       } catch (error) {
         console.error('Failed to load IFC file:', error)
       }
@@ -597,6 +601,8 @@ export function useEditorModel() {
 
     await _planManager()
     await _setupStyling()
+
+    isFileReady.value = true
   }
 
   function _cleanupScene() {
@@ -605,7 +611,7 @@ export function useEditorModel() {
       model.dispose()
     }
     plans?.dispose()
-    culler?.dispose()
+    //culler?.dispose()
     fragments?.dispose()
   }
 
@@ -632,17 +638,17 @@ export function useEditorModel() {
 
     reactivePlansList.value = [...plans.list]
 
-    const cullers = components.get(OBC.Cullers)
-    culler = cullers.create(world)
-    for (const fragment of model.items) {
-      culler.add(fragment.mesh)
-    }
+    // const cullers = components.get(OBC.Cullers)
+    // culler = cullers.create(world)
+    // for (const fragment of model.items) {
+    //   culler.add(fragment.mesh)
+    // }
 
-    culler.needsUpdate = true
+    // culler.needsUpdate = true
 
-    world.camera.controls.addEventListener('sleep', () => {
-      culler.needsUpdate = true
-    })
+    // world.camera.controls.addEventListener('sleep', () => {
+    //   culler.needsUpdate = true
+    // })
   }
 
   const activatePlan = (plan: { id: string }) => {
@@ -655,7 +661,7 @@ export function useEditorModel() {
     world.scene.three.background = new THREE.Color('white')
     const plansComponent = world.components.get(OBCF.Plans)
     plansComponent.goTo(plan.id)
-    culler.needsUpdate = true
+    //culler.needsUpdate = true
   }
 
   const exitPlanView = () => {
@@ -669,7 +675,7 @@ export function useEditorModel() {
     world.scene.three.background = new THREE.Color('white')
     const plansComponent = world.components.get(OBCF.Plans)
     plansComponent.exitPlanView()
-    culler.needsUpdate = true
+    //culler.needsUpdate = true
   }
 
   async function _setupStyling() {
@@ -923,6 +929,7 @@ export function useEditorModel() {
     saveFile,
     activatePlan,
     exitPlanView,
+    isFileReady,
     captureScreenshot,
   }
 }
